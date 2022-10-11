@@ -1,5 +1,5 @@
 pipeline {
-    agent {label 'MVN-11/8-JDK' }
+    agent {label 'JDK-11-MVN-PIP-NPM' }
     stages {
         stage ('source code  from git remote repository') {
             steps {
