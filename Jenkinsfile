@@ -4,7 +4,7 @@ pipeline {
         stage ('source code  from git remote repository') {
             steps {
                 git url: 'https://github.com/subrAt5238/spring-petclinic.git',
-                 branch: 'qtdev_1'
+                 branch: 'subrat'
             }
         }
         stage('To build maven package') {
