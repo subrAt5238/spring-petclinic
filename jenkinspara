@@ -5,11 +5,8 @@ pipeline {
 	string(name: 'GOAL', defaultValue: 'package', description: 'our Goal')
 	}
 	triggers{
-	      pollSCM('* * * * *')
-	}
-	
-	triggers{ 
-	cron('*/15 * * * *')
+	      pollSCM('* * * * *') 
+	      cron('*/15 * * * *')
 	}
 	
     stages {
