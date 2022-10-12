@@ -3,6 +3,9 @@ pipeline {
 	parameters { 
 	choice(name: 'BRANCH', choices: ['parameter', 'subrat', 'main'], description: 'select branch to build')
 	string(name: 'GOAL', defaultValue: 'package', description: 'our Goal')
+	triggers{
+	      pollSCM('* * * * *')
+	}
 	}
     stages {
         stage ('source code  from git remote repository') {
@@ -28,4 +31,3 @@ pipeline {
         }
     }
 }
-
