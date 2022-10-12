@@ -8,6 +8,10 @@ pipeline {
 	      pollSCM('* * * * *')
 	}
 	
+	triggers{ 
+	cron('*/15 * * * *')
+	}
+	
     stages {
         stage ('source code  from git remote repository') {
             steps {
