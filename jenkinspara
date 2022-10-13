@@ -11,16 +11,14 @@ pipeline {
 	
     stages {
         stage ('source code  from git remote repository') {
-            steps {
-                git url: 'https://github.com/subrAt5238/spring-petclinic.git',
-                 branch: "${params.BRANCH}"
-            }
-        }
-		stage('build start'){
-		mail subject: 'Build started', 
+            steps {	
+		          mail subject: 'Build started', 
                   body: 'Build started', 
                   to: 'subratsenapati23@gmail.com'
-		}
+                  git url: 'https://github.com/subrAt5238/spring-petclinic.git',
+                  branch: "${params.BRANCH}"
+            }
+        }
         stage('To build maven package') {
             steps {
                 sh "mvn ${params.GOAL}"
