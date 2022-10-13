@@ -5,7 +5,7 @@ pipeline {
 	string(name: 'GOAL', defaultValue: 'package', description: 'our Goal')
 	}
 	triggers{
-	      pollSCM('* * * * *') 
+	      pollSCM('* * * * *')
 	}
 	
     stages {
@@ -23,6 +23,7 @@ pipeline {
                 sh "mvn ${params.GOAL}"
             }
         }
+	}
  post {
         always {
             echo 'Job completed'
@@ -44,10 +45,8 @@ pipeline {
            stage("junit Reports") {
             steps {
                 junit '**/surefire-reports/*.xml'
-            }
-	      }
+                }
+	        }
 	    }
-      }
-    }
-  }
+    }   
 }
