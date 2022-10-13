@@ -1,4 +1,4 @@
-pipeline {
+ipipeline {
     agent {label 'JDK-11-MVN-PIP-NPM' }
 	parameters { 
 	choice(name: 'BRANCH', choices: ['parameter', 'subrat', 'main'], description: 'select branch to build')
@@ -38,6 +38,7 @@ pipeline {
         }
 		 success {
             junit '**/surefire-reports/*.xml'
+			archiveArtifacts artifacts: 'target/*.jar'
         }		
     }
 }
