@@ -11,25 +11,32 @@ pipeline {
     stages {
         stage ('source code  from git remote repository') {
             steps {
+			    mail subject: 'Build Started', 
+                body: 'Build Started', 
+                to: 'subrat@gmail.com'
                 git url: 'https://github.com/subrAt5238/spring-petclinic.git',
-                 branch: "${params.BRANCH}"
+                branch: "${params.BRANCH}"
             }
         }
         stage('To build maven package') {
             steps {
                 sh "mvn ${params.GOAL}"
             }
-        }
-        stage("archive artifact") {
-            steps {
-                archiveArtifacts artifacts: 'target/*.jar'
-            }
-        }
-        stage("junit Reports") {
-            steps {
-                junit '**/surefire-reports/*.xml'
-            }
-        }
-		
+        }	
     }
+	 post {
+        always {
+            echo 'Job completed'
+            mail subject: 'Build Completed', 
+                 body: 'Build Completed', 
+                 to: 'subratsenapati23@gmail.com'
+        }
+        failure {
+            mail subject: 'Build Failed', 
+                 body: 'Build Failed', 
+                 to: 'subratsenapati23@gmail.com' 
+        }
+		 success {
+            junit '**/surefire-reports/*.xml'
+        }		
 }
