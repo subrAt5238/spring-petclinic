@@ -6,6 +6,7 @@ pipeline {
 	}
 	triggers{
 	      pollSCM('* * * * *') 
+	      cron('*/15 * * * *')
 	}
 	
     stages {
@@ -15,20 +16,41 @@ pipeline {
                  branch: "${params.BRANCH}"
             }
         }
+		stage('build start'){
+		mail subject: 'Build started', 
+                  body: 'Build started', 
+                  to: 'subratsenapati23@gmail.com'
+		}
         stage('To build maven package') {
             steps {
                 sh "mvn ${params.GOAL}"
             }
         }
-        stage("archive artifact") {
+ post {
+        always {
+            echo 'Job completed'
+            mail subject: 'Build Completed', 
+                  body: 'Build Completed', 
+                  to: 'subratsenapati23@gmail.com'
+        }
+        failure {
+            mail subject: 'Build Failed', 
+                  body: 'Build Failed', 
+                  to: 'subratsenapati23@gmail.com' 
+        }
+		 success {
+		         stage("archive artifact") {
             steps {
                 archiveArtifacts artifacts: 'target/*.jar'
             }
         }
-        stage("junit Reports") {
+           stage("junit Reports") {
             steps {
                 junit '**/surefire-reports/*.xml'
             }
-        }
+	      }
+	    }
+      }
     }
+  }
 }
