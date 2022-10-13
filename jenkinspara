@@ -1,4 +1,4 @@
-ipipeline {
+pipeline {
     agent {label 'JDK-11-MVN-PIP-NPM' }
 	parameters { 
 	choice(name: 'BRANCH', choices: ['parameter', 'subrat', 'main'], description: 'select branch to build')
@@ -22,7 +22,12 @@ ipipeline {
             steps {
                 sh "mvn ${params.GOAL}"
             }
-        }	
+        }
+		stage("archive artifact") {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar'
+            }
+        }
     }
 	 post {
         always {
@@ -38,7 +43,6 @@ ipipeline {
         }
 		 success {
             junit '**/surefire-reports/*.xml'
-			archiveArtifacts artifacts: 'target/*.jar'
         }		
     }
 }
