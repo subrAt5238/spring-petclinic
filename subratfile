@@ -1,16 +1,34 @@
- stage ('Exec Maven') {
+pipeline {
+    agent {label 'JDK-11-MVN-PIP-NPM'}
+	triggers{
+	      pollSCM('* * * * *') 
+	}
+	
+    stages {
+        stage ('source code  from git remote repository') {
             steps {
-                rtMavenRun (
-                    tool: 'MAVEN_DEFAULT', // Tool name from Jenkins configuration
-                    pom: 'pom.xml',
-                    goals: 'clean install',
-                    deployerId: "MAVEN_DEPLOYER"
-                )
+               git url: 'https://github.com/subrAt5238/spring-petclinic.git',
+                branch: 'parameter'
             }
         }
-		
-		
-		stage ('Exec Maven') {
+        stage('To build maven package') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+		 stage ('Artifactory configuration') {
+            steps {               
+				rtMavenDeployer (
+                    id: "MAVEN_DEPLOYER",
+                    serverId:    "subrat_jfrog",
+                    releaseRepo:  "subrat-libs-release-local",
+                    snapshotRepo: "subrat-libs-snapshot-local"
+                )
+
+            }
+        }
+
+        stage ('Exec Maven') {
             steps {
                 rtMavenRun (
                     tool:  "MVN-3.6.3",
@@ -20,3 +38,14 @@
                 )
             }
         }
+
+        stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: "subrat_jfrog"
+                )
+            }
+        }
+    }
+	 
+}
