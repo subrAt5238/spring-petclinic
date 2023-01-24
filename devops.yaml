@@ -1,0 +1,15 @@
+---
+pool: azure master
+
+trigger:
+  - subrat
+
+
+steps:
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      goals: 'package'
+      publishJUnitResults: yes
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      jdkVersionOption: '1.11'
